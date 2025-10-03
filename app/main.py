@@ -7,5 +7,5 @@ app = FastAPI(
     version="1.0.0",
 )
 
-
+# registro de todas as rotas da API
 app.include_router(api_router, prefix="/api")

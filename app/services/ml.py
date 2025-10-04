@@ -117,7 +117,7 @@ async def predict_weather(latitude, longitude, day, month, year):
         sumPrec += y_pred_prec
         y_pred_vento = modelo_vento.predict(X_novo)[0]
         sumVento += y_pred_vento
-        pred.append({"hora": i, "temp": float(y_pred_temp), "prec": float(y_pred_prec), "vento": float(y_pred_vento), "timestamp": f"{year}-{month}-{day}T{i if i >= 10 else f'0{i}'}:00:00Z"})
+        pred.append({"hora": i, "temp": float(y_pred_temp), "prec": float(y_pred_prec), "vento": float(y_pred_vento), "timestamp": f"{year}-{month}-{day if day >= 10 else f'0{day}'}T{i if i >= 10 else f'0{i}'}:00:00Z"})
     
     data["inputs"] =({"lat": latitude, "lon": longitude, "dia": day, "mes": month, "ano": year})
     data["previsoes"] =(pred)

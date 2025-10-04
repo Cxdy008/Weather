@@ -79,10 +79,22 @@ def train_and_save_models(latitude, longitude, date):
 
 
 async def predict_weather(latitude, longitude, day, month, year):
-    train_and_save_models(latitude, longitude, f"{year}{month:02d}{day:02d}")
-    modelo_temp = joblib.load( os.path.join(MODELS_DIR, "modelo_temp.pkl"))
-    modelo_prec = joblib.load( os.path.join(MODELS_DIR, "modelo_prec.pkl"))
-    modelo_vento = joblib.load(os.path.join(MODELS_DIR, "modelo_vento.pkl"))
+    
+    if not os.path.exists(MODELS_DIR):
+        os.makedirs(MODELS_DIR)
+
+
+    modelos = [
+        os.path.join(MODELS_DIR, "modelo_temp.pkl"),
+        os.path.join(MODELS_DIR, "modelo_prec.pkl"),
+        os.path.join(MODELS_DIR, "modelo_vento.pkl"),
+    ]
+    if not all(os.path.exists(m) for m in modelos):
+        train_and_save_models(latitude, longitude, f"{year}-{month:02d}-{day:02d}")
+
+    modelo_temp = joblib.load(modelos[0])
+    modelo_prec = joblib.load(modelos[1])
+    modelo_vento = joblib.load(modelos[2])
 
 
     data = {}
@@ -114,8 +126,6 @@ async def predict_weather(latitude, longitude, day, month, year):
 
     return data   
 
-resultado = asyncio.run(predict_weather(-8.839, 13.289, 2, 10, 2026))
-print(resultado)
 
 
 
